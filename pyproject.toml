@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "kaggle-ps4e1"
+version = "0.1.0"
+description = "Production code for Kaggle Playground Season 4 Episode 1"
+authors = ["Thrynk <thocarin@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+pandas = ">=2.0.3"
+numpy = ">=1.24.0"
+pydantic = ">=1.10.4,<2"
+loguru = ">=0.7.0"
+click = ">=8.1.6"
+scikit-learn = "^1.4.0"
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.28.0"
+nbformat = "^5.9.2"
+pytest = ">=7.4.0"
+pytest-cov = ">=4.1.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath = "src/"
