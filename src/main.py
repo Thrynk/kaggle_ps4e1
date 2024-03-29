@@ -1,7 +1,7 @@
 import click
 
 from preprocess import Preprocess
-# from train import Train
+from train import Train
 
 @click.group()
 def cli():
@@ -18,8 +18,8 @@ def preprocess() -> None:
 def train() -> None:
     """Train model.
     """
-    # t = Train()
-    # t.main()
+    t = Train()
+    t.main()
 
 @cli.command()
 def transform() -> None:

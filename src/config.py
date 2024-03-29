@@ -8,7 +8,7 @@ class PreprocessConfig(BaseSettings):
         env="PATH_LOCAL_RAW_DATA"
     )
 
-    PATH_LOCAL_TRAIN_PREPROCESSED_DATA: str = Field(
+    PATH_LOCAL_PREPROCESSED_DATA: str = Field(
         default="data/preprocess_data.csv",
         description="Path to preprocessed data csv file.",
         env="PATH_LOCAL_PREPROCESSED_DATA"

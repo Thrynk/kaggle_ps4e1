@@ -1,4 +1,5 @@
 import pandas as pd
+import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 from loguru import logger
@@ -27,6 +28,7 @@ class Preprocess:
         """Preprocess categorical variables into dummy variables
         """
         self.data_with_dummies = pd.get_dummies(self.raw_data, columns=self.CONF.preprocess_config.CAT_COLUMNS)
+        self.raw_data.drop(self.CONF.preprocess_config.CAT_COLUMNS, axis=1, inplace=True)
         logger.info("Categorical features preprocessed and replaced with dummies.")
 
     def preprocess_numerical_variables(self) -> None:
@@ -38,10 +40,22 @@ class Preprocess:
         self.preprocessed_data.loc[:, self.CONF.preprocess_config.NUMERICAL_COLUMNS] = std_scaler.fit_transform(self.preprocessed_data[self.CONF.preprocess_config.NUMERICAL_COLUMNS])
         logger.info("Numerical features preprocessed with scaling.")
 
+    def drop_unused_columns(self) -> None:
+        logger.debug(np.asarray([self.preprocessed_data.columns.str.contains(column) for column in self.CONF.preprocess_config.CAT_COLUMNS]))
+        unused_colums = [
+            column_name for column_name in list(self.preprocessed_data.columns) 
+            if column_name not in 
+                self.CONF.preprocess_config.NUMERICAL_COLUMNS
+                + self.CONF.preprocess_config.ORDINAL_CAT_COLUMNS
+                + [self.CONF.preprocess_config.TARGET]
+        ]
+
+        logger.info(f"Unused variables : {unused_colums}")
+
     def save_data(self) -> None:
         """Save preprocessed data.
         """
-        self.preprocessed_data.to_csv(self.CONF.preprocess_config.PATH_LOCAL_TRAIN_PREPROCESSED_DATA)
+        self.preprocessed_data.to_csv(self.CONF.preprocess_config.PATH_LOCAL_PREPROCESSED_DATA)
         logger.info("Preprocessed data saved.")
 
     def main(self) -> None:
@@ -50,5 +64,6 @@ class Preprocess:
         self.load_data()
         self.preprocess_categorical_variables()
         self.preprocess_numerical_variables()
-        self.save_data()
+        self.drop_unused_columns()
+        #self.save_data()
         logger.info("Preprocessing pipeline finished.")
